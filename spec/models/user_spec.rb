@@ -36,6 +36,14 @@ describe User do
     before { @user.name = "a" * 51 }
     it { should_not be_valid }
   end
+  describe "when email is not downcase" do
+    let (:email) { "FoO@BaR.CoM" }
+    it "should be saved as all lowercase" do
+      @user.email = email
+      @user.save
+      @user.reload.email.should == email.downcase
+    end
+  end
   describe "when email format is invalid" do
     it "should be invalid" do
       addresses = %w[user@foo,com user_at_foo.org example.user@foo. foo@bar_baz.com foo@bar+baz.com]
